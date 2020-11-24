@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 634adb6004210e153f3c37e10472bd9a1f79a3efd11f3f7c1d3a8e45050fcad7
+-- hash: b3080282d61054457bd0556d50012b96d105e99c3bfd87baeea7b98abc849f21
 
 name:           KTscheme
 version:        0.1.0.0
@@ -35,7 +35,7 @@ library
   build-depends:
       array
     , base >=4.7 && <5
-    , vector
+    , gloss
   default-language: Haskell2010
 
 executable KTscheme-exe
@@ -49,7 +49,7 @@ executable KTscheme-exe
       KTscheme
     , array
     , base >=4.7 && <5
-    , vector
+    , gloss
   default-language: Haskell2010
 
 test-suite KTscheme-test
@@ -64,5 +64,5 @@ test-suite KTscheme-test
       KTscheme
     , array
     , base >=4.7 && <5
-    , vector
+    , gloss
   default-language: Haskell2010
