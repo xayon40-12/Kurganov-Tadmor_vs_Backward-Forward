@@ -1,18 +1,7 @@
-{-# LANGUAGE BangPatterns #-}
-
 module KT where
 
-import Control.Concurrent
-import Control.Monad
-import Data.Array.ST hiding (index)
-import Data.Array.Unboxed hiding (index)
-import System.IO
-
-type T = Double
-
-type Vec a = UArray Int a
-
-type Id = Int
+import Evolve
+import Data.Array.Unboxed
 
 minmod :: [T] -> T
 minmod [a, b] = (signum a + signum b) / 2 * min (abs a) (abs b)
@@ -21,12 +10,8 @@ minmod (a : b : xs) = minmod $ minmod [a, b] : xs
 rho :: Func -> T -> T
 rho f' u = abs $ f' u
 
-type Func = T -> T
-
-type Evolve = T -> Func -> Func -> Vec T -> Id -> T
-
-c :: Evolve
-c dx f f' u i = - (hp - hm) / dx
+kt :: Evolve
+kt dx f f' u i = - (hp - hm) / dx
   where
     s = (\(a, b) -> b - a) . bounds $ u
     theta = 1.7
@@ -49,26 +34,3 @@ c dx f f' u i = - (hp - hm) / dx
     hp = (f upp + f ump - ap * (upp - ump)) / 2
     hm = (f upm + f umm - am * (upm - umm)) / 2
 
-c2 :: Evolve
-c2 dx f fp u i = - ux / dx
-  where
-    s = (\(a, b) -> b - a) . bounds $ u
-    l = s + 1
-    um = f $ u ! mod (i -1) l
-    uc = f $ u ! mod i l
-    up = f $ u ! mod (i + 1) l
-    ux =
-      if fp (u ! mod i l) < 0
-        then up - uc
-        else uc - um
-
-next :: T -> T -> Evolve -> Func -> Func -> Vec T -> Vec T
-next dx dt e f f' u = runSTUArray $ do
-  let s = (\(a, b) -> b - a) . bounds $ u
-  let c = e dx f f'
-  tu <- newArray (0, s) 0
-  forM_ [0 .. s] $ \i -> do
-    let x = u ! i
-    let y = c u i
-    writeArray tu i $ x + dt * y
-  return tu
