@@ -2,26 +2,33 @@ module Evolve where
 
 --import Control.Concurrent
 import Control.Monad
-import Data.Array.ST hiding (index)
-import Data.Array.Unboxed hiding (index)
+import Data.Array.ST
+import Data.Array.Unboxed
 
 type T = Float
 
-type Vec a = UArray Int a
+type Arr = UArray Int T
 
 type Id = Int
 
+type Size = Int
+
 type Func = T -> T
 
-type Evolve = T -> Func -> Func -> Vec T -> Id -> T
+data System = Sys Func Func Size Arr
 
-euler :: T -> T -> Evolve -> Func -> Func -> Vec T -> Vec T
-euler dx dt e f f' u = runSTUArray $ do
+type Evolve = T -> System -> Id -> T
+
+u__ :: System -> Id -> T
+u__ (Sys _ _ s u) i = u ! mod i s
+
+euler :: T -> T -> Evolve -> System -> System
+euler dx dt e sys@(Sys f f' size u) = Sys f f' size $ runSTUArray $ do
   let s = (\(a, b) -> b - a) . bounds $ u
-  let c = e dx f f'
+  let c = e dx sys
   tu <- newArray (0, s) 0
   forM_ [0 .. s] $ \i -> do
-    let x = u ! i
-    let y = c u i
+    let x = u__ sys i
+    let y = c i
     writeArray tu i $ x + dt * y
   return tu

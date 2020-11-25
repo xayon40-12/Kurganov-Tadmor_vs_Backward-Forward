@@ -7,7 +7,7 @@ import Graphics.Gloss
 import Graphics.Gloss.Interface.Pure.Game
 import KT (kt)
 
-data Sym = Sym Evolve (Vec T)
+data Sym = Sym Evolve System
 
 type State = (Sym, Sym)
 
@@ -18,9 +18,9 @@ w2 = fromIntegral $ div (width -10) 2
 
 list = zip [0 ..] $ take n $ replicate (div n 3) h2 ++ repeat 0
 
-a = Sym kt $ array (0, n -1) list
+a = Sym kt $ Sys f f' n (array (0, n -1) list)
 
-b = Sym bf $ array (0, n -1) list
+b = Sym bf $ Sys f f' n (array (0, n -1) list)
 
 v = 1
 
@@ -44,7 +44,7 @@ main :: IO ()
 main = play (InWindow "KT" (width, hight) (0, 0)) white 100 (a, b) makePicture handleEvent stepWorld
 
 makePicture :: State -> Picture
-makePicture (Sym _ u, Sym _ v) =
+makePicture (Sym _ (Sys _ _ _ u), Sym _ (Sys _ _ _ v)) =
   pictures $
        draw u (-w2)
     ++ draw v 6
@@ -61,4 +61,4 @@ handleEvent _ = id
 stepWorld :: Float -> State -> State
 stepWorld _ (Sym cu u, Sym cv v) = (Sym cu $ it cu u, Sym cv $ it cv v)
   where
-    it fd = (!! skip) . iterate (euler dx dt fd f f')
+    it fd = (!! skip) . iterate (euler dx dt fd)

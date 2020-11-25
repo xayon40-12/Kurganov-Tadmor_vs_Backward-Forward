@@ -1,17 +1,14 @@
 module BF where
 
 import Evolve
-import Data.Array.Unboxed
     
 bf :: Evolve
-bf dx f fp u i = - ux / dx
+bf dx s@(Sys f f' _ u) i = - ux / dx
   where
-    s = (\(a, b) -> b - a) . bounds $ u
-    l = s + 1
-    um = f $ u ! mod (i -1) l
-    uc = f $ u ! mod i l
-    up = f $ u ! mod (i + 1) l
+    um = f $ u__ s (i -1)
+    uc = f $ u__ s i
+    up = f $ u__ s (i + 1)
     ux =
-      if fp (u ! mod i l) < 0
+      if f' (u__ s i) < 0
         then up - uc
         else uc - um
