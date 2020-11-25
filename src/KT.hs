@@ -43,4 +43,4 @@ ux_ u i = minmod [theta * (uc - um), (up - um) / 2, theta * (up - uc)]
         um = u__ u (i -1)
         uc = u__ u i
         up = u__ u (i + 1)
-        theta = 1.7
+        theta = 2
