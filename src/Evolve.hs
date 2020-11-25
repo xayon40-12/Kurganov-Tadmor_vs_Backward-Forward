@@ -5,7 +5,7 @@ import Control.Monad
 import Data.Array.ST hiding (index)
 import Data.Array.Unboxed hiding (index)
 
-type T = Double
+type T = Float
 
 type Vec a = UArray Int a
 
