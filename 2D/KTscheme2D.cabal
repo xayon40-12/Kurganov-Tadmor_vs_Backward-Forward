@@ -4,13 +4,13 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 43e8ec3b7ff659bd1f67a7ec1b40488cc882eaab4020d112a50b951ff865afe9
+-- hash: 5674a6b873216b0ef6a03cc7a1f5fde8d04ee9c943db0a40506993f912befae0
 
-name:           KTscheme
+name:           KTscheme2D
 version:        0.1.0.0
-description:    Please see the README on GitHub at <https://github.com/xayon40-12/KTscheme#readme>
-homepage:       https://github.com/xayon40-12/KTscheme#readme
-bug-reports:    https://github.com/xayon40-12/KTscheme/issues
+description:    Please see the README on GitHub at <https://github.com/xayon40-12/2D#readme>
+homepage:       https://github.com/xayon40-12/2D#readme
+bug-reports:    https://github.com/xayon40-12/2D/issues
 author:         Nathan Touroux
 maintainer:     touroux.nathan@gmail.com
 copyright:      2020 Nathan Touroux
@@ -23,48 +23,44 @@ extra-source-files:
 
 source-repository head
   type: git
-  location: https://github.com/xayon40-12/KTscheme
+  location: https://github.com/xayon40-12/2D
 
 library
-  exposed-modules:
-      BF
-      Evolve
-      KT
   other-modules:
-      Paths_KTscheme
+      Paths_KTscheme2D
   hs-source-dirs:
       src
   build-depends:
-      array
+      accelerate
     , base >=4.7 && <5
     , gloss
   default-language: Haskell2010
 
-executable KTscheme-exe
+executable 2D-exe
   main-is: Main.hs
   other-modules:
-      Paths_KTscheme
+      Paths_KTscheme2D
   hs-source-dirs:
       app
   ghc-options: -threaded -rtsopts -with-rtsopts=-N -O2
   build-depends:
-      KTscheme
-    , array
+      KTscheme2D
+    , accelerate
     , base >=4.7 && <5
     , gloss
   default-language: Haskell2010
 
-test-suite KTscheme-test
+test-suite 2D-test
   type: exitcode-stdio-1.0
   main-is: Spec.hs
   other-modules:
-      Paths_KTscheme
+      Paths_KTscheme2D
   hs-source-dirs:
       test
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
-      KTscheme
-    , array
+      KTscheme2D
+    , accelerate
     , base >=4.7 && <5
     , gloss
   default-language: Haskell2010

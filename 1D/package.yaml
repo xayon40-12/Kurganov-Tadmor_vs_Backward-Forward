@@ -1,4 +1,4 @@
-name:                KTscheme
+name:                KTscheme1D
 version:             0.1.0.0
 github:              "xayon40-12/KTscheme"
 license:             BSD3
@@ -37,7 +37,7 @@ executables:
     - -with-rtsopts=-N
     - -O2
     dependencies:
-    - KTscheme
+    - KTscheme1D
 
 tests:
   KTscheme-test:
@@ -48,4 +48,4 @@ tests:
     - -rtsopts
     - -with-rtsopts=-N
     dependencies:
-    - KTscheme
+    - KTscheme1D
