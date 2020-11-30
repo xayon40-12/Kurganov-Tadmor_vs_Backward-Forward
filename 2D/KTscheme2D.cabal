@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 5674a6b873216b0ef6a03cc7a1f5fde8d04ee9c943db0a40506993f912befae0
+-- hash: 7767636242bee9aa21c9bd3c691feb2f30d0f34cc78be2fb8fc0b47aa4350c15
 
 name:           KTscheme2D
 version:        0.1.0.0
@@ -32,8 +32,10 @@ library
       src
   build-depends:
       accelerate
+    , accelerate-llvm-ptx
     , base >=4.7 && <5
     , gloss
+    , gloss-accelerate
   default-language: Haskell2010
 
 executable 2D-exe
@@ -46,8 +48,10 @@ executable 2D-exe
   build-depends:
       KTscheme2D
     , accelerate
+    , accelerate-llvm-ptx
     , base >=4.7 && <5
     , gloss
+    , gloss-accelerate
   default-language: Haskell2010
 
 test-suite 2D-test
@@ -61,6 +65,8 @@ test-suite 2D-test
   build-depends:
       KTscheme2D
     , accelerate
+    , accelerate-llvm-ptx
     , base >=4.7 && <5
     , gloss
+    , gloss-accelerate
   default-language: Haskell2010

@@ -22,6 +22,8 @@ description:         Please see the README on GitHub at <https://github.com/xayo
 dependencies:
 - base >= 4.7 && < 5
 - accelerate
+- gloss-accelerate
+- accelerate-llvm-ptx
 - gloss
 
 library:
