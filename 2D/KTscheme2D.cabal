@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 7767636242bee9aa21c9bd3c691feb2f30d0f34cc78be2fb8fc0b47aa4350c15
+-- hash: be43787c33f710d83a1eb89ffc415f236b7342a829a809a3de466475e5ed369b
 
 name:           KTscheme2D
 version:        0.1.0.0
@@ -26,6 +26,9 @@ source-repository head
   location: https://github.com/xayon40-12/2D
 
 library
+  exposed-modules:
+      BF
+      Evolve
   other-modules:
       Paths_KTscheme2D
   hs-source-dirs:
@@ -44,7 +47,7 @@ executable 2D-exe
       Paths_KTscheme2D
   hs-source-dirs:
       app
-  ghc-options: -threaded -rtsopts -with-rtsopts=-N -O2
+  ghc-options: -threaded -O2 -rtsopts -with-rtsopts=-N
   build-depends:
       KTscheme2D
     , accelerate

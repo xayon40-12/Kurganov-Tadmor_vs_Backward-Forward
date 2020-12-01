@@ -35,9 +35,9 @@ executables:
     source-dirs:         app
     ghc-options:
     - -threaded
+    - -O2
     - -rtsopts
     - -with-rtsopts=-N
-    - -O2
     dependencies:
     - KTscheme2D
 

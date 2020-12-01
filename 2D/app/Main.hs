@@ -1,39 +1,21 @@
 module Main where
-
+    
 import Graphics.Gloss
-import Graphics.Gloss.Interface.Pure.Game
-import Data.Array.Accelerate hiding (fromIntegral)
-import Graphics.Gloss.Accelerate.Data.Picture
-import Data.Array.Accelerate.LLVM.PTX (run)
+import Data.Array.Accelerate (constant)
 
-type Arr = Acc (Array DIM2 Float)
-newtype System = Sys Arr
-type State = [System]
+import Evolve
+import BF
 
-width = 400 :: Int
-
-hight = 400 :: Int
-
-arr :: Arr
-arr = generate (constant (Z :. width :. hight)) (\xi -> constant 0)
-start = []
+v = (10,10)
+f u = fst v*u
+g u = snd v*u
+f' _ = fst v
+g' _ = snd v
+dx = constant 0.1
+dt = dx / uncurry (+) v / constant 10
 
 main :: IO ()
-main = play (InWindow "KT" (width+10, hight+10) (0, 0)) white 60 start makePicture handleEvent stepWorld
+main = do
+    let start = replicate 4 (Sys f f' g g' dx dt bf arr)
+    play (InWindow "KT" (2*width+10, 2*hight+10) (0, 0)) white 60 start makePicture handleEvent stepWorld
 
-makePicture :: State -> Picture
-makePicture _ =
-  pictures
-    [ polygon [(5, - h2), (5, h2), (-6, h2), (-6, - h2)],
-      polygon [(- w2 -1, -5), (w2, -5), (w2, 5), (- w2 -1, 5)]
-    ]
-  where
-    h2 = fromIntegral hight / 2
-    w2 = fromIntegral width / 2
-    --topic = bitmapOfArray False
-
-handleEvent :: Event -> State -> State
-handleEvent _ = id
-
-stepWorld :: Float -> State -> State
-stepWorld _ = id
