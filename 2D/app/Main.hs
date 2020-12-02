@@ -6,7 +6,7 @@ import Data.Array.Accelerate (constant)
 import Evolve
 import BF
 
-v = (10,10)
+v = (1,1)
 f u = fst v*u
 g u = snd v*u
 f' _ = fst v

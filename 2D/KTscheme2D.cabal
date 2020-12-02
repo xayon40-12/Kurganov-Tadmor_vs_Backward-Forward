@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: be43787c33f710d83a1eb89ffc415f236b7342a829a809a3de466475e5ed369b
+-- hash: b2e6b483786c435cc7b867521b3b67f71a6fdcfea9628f7f15fc2365aaf27786
 
 name:           KTscheme2D
 version:        0.1.0.0
@@ -35,6 +35,7 @@ library
       src
   build-depends:
       accelerate
+    , accelerate-llvm-native
     , accelerate-llvm-ptx
     , base >=4.7 && <5
     , gloss
@@ -47,10 +48,11 @@ executable 2D-exe
       Paths_KTscheme2D
   hs-source-dirs:
       app
-  ghc-options: -threaded -O2 -rtsopts -with-rtsopts=-N
+  ghc-options: -threaded -O2 -rtsopts -with-rtsopts=-N -with-rtsopts=-n2M -with-rtsopts=-A64M -with-rtsopts=-qg
   build-depends:
       KTscheme2D
     , accelerate
+    , accelerate-llvm-native
     , accelerate-llvm-ptx
     , base >=4.7 && <5
     , gloss
@@ -68,6 +70,7 @@ test-suite 2D-test
   build-depends:
       KTscheme2D
     , accelerate
+    , accelerate-llvm-native
     , accelerate-llvm-ptx
     , base >=4.7 && <5
     , gloss
