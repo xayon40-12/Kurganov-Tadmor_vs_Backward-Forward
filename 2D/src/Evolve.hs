@@ -24,6 +24,7 @@ hight = 400 :: Int
 
 arr :: Arr
 arr = res
+    -- do not use GPU here (in main thread)
     where !res = CPU.runN $ generate (constant (Z :. width :. hight))
                (\xy -> let (Z :. x :. y) = unlift xy
                            wl = constant (div width 3)
@@ -45,7 +46,7 @@ makePicture s =
     wp = w2/2+3
     hp = h2/2+3
     !pics = [translate x y $
-                bitmapOfArray (CPU.runN $ A.map toWord32 (use a)) False
+                bitmapOfArray (GPU.runN $ A.map toWord32 (use a)) False
                 | ((x,y),Sys _ _ _ _ _ _ _ a) <- zip [(-wp,hp),(wp,hp),(-wp,-hp),(wp,-hp)] s]
 
 toWord32 :: Exp T -> Exp Word32
