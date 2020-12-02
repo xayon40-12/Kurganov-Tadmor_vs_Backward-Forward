@@ -6,7 +6,7 @@ import Prelude ()
 import Evolve
 
 bf :: Evolve
-bf (Sys f f' g g' dx _ _ u) = stencil sbf (boundary u) (use u)
+bf (Sys f f' g g' dx _ _ _) u = stencil sbf (boundary u) u
     where sbf :: Stencil3x3 T -> Exp T
           sbf ((_,a,_),(b,c,d),(_,e,_)) = -((f' c < 0 ? (cd,bc)) + (g' c > 0 ? (ec,ca)))/dx
               where 
@@ -15,5 +15,5 @@ bf (Sys f f' g g' dx _ _ u) = stencil sbf (boundary u) (use u)
                     ca = g a-g c
                     ec = g c-g e
 
-boundary :: Arr -> Boundary Arr
+boundary :: Acc Arr -> Boundary Arr
 boundary _ = function $ const 0
