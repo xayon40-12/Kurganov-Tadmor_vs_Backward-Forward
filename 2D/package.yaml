@@ -35,11 +35,12 @@ executables:
     main:                Main.hs
     source-dirs:         app
     ghc-options:
+    - -Wall
     - -threaded
     #- -eventlog
     - -O2
     - -rtsopts
-    - -with-rtsopts=-N
+    #- -with-rtsopts=-N
     - -with-rtsopts=-n2M
     - -with-rtsopts=-A64M
     - -with-rtsopts=-qg

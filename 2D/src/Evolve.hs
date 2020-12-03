@@ -8,6 +8,7 @@ import qualified Data.Array.Accelerate.LLVM.Native as CPU
 import qualified Data.Array.Accelerate.LLVM.PTX as GPU
 import Graphics.Gloss.Accelerate.Data.Picture
 import Graphics.Gloss.Interface.Pure.Game
+import Graphics.Gloss.Data.ViewPort (ViewPort)
 
 type T = Float
 
@@ -16,22 +17,31 @@ type Arr = Array DIM2 T
 type Arr2 = Array DIM2 (T, T)
 type Func = Exp T -> Exp T
 
-data System = Sys Func Func Func Func (Exp T) (Exp T) Evolve Arr
+data Conf = Conf {_f :: Func
+                 ,_f' :: Func
+                 ,_g :: Func
+                 ,_g' :: Func
+                 ,_dx :: Exp T
+                 ,_dt :: Exp T
+                 ,_ev :: Evolve
+                 }
 
-type Evolve = System -> Acc Arr -> Acc Arr
+type System = (Conf,Arr)
+
+type Evolve = Conf -> Acc Arr -> Acc Arr
 
 type State = [System]
 
-width = 200 :: Int
+width = 400 :: Int
 
-hight = 200 :: Int
+hight = 400 :: Int
 
 arr :: Arr
 arr = res
   where
     -- do not use GPU here (in main thread)
     !res =
-      CPU.runN $
+      CPU.run $
         generate
           (constant (Z :. width :. hight))
           ( \xy ->
@@ -45,7 +55,7 @@ arr = res
 
 makePicture :: State -> Picture
 makePicture s =
-  pictures $
+  pictures $!
     pics
       ++ [ polygon [(5, - h2 -1), (5, h2), (-6, h2), (-6, - h2 -1)],
            polygon [(- w2 -1, -6), (w2, -6), (w2, 5), (- w2 -1, 5)]
@@ -55,10 +65,10 @@ makePicture s =
     w2 = fromIntegral width + 5
     wp = w2 / 2 + 3
     hp = h2 / 2 + 2
-    !pics =
+    pics =
       [ translate x y $
-          bitmapOfArray (GPU.runN $ A.map toWord32 (use a)) False
-        | ((x, y), Sys _ _ _ _ _ _ _ a) <- zip [(- wp, hp), (wp, hp), (- wp, - hp-2), (wp, - hp-2)] s
+          bitmapOfArray (CPU.run1 (A.map toWord32) a) True
+        | ((x, y), (_,a)) <- zip [(- wp, hp), (wp, hp), (- wp, - hp-2), (wp, - hp-2)] s
       ]
 
 toWord32 :: Exp T -> Exp Word32
@@ -74,24 +84,22 @@ rgba i j k l = r + 256 * (g + 256 * (b + 256 * a))
 handleEvent :: Event -> State -> State
 handleEvent _ = id
 
-stepWorld :: Float -> State -> State
-stepWorld _ s = next <$> s
+stepWorld :: ViewPort -> Float -> State -> State
+stepWorld _ _ s = next <$> s
 
 next :: System -> System
-next sys@(Sys f f' g g' dx dt c u) = Sys f f' g g' dx dt c un
+next (conf@(Conf _ _ _ _ _ dt c),u) = (conf,un)
   where
-    !un = GPU.runN u1
-    c' = c sys
-    n1 = 0.5
-    u0 = use u
-    u1 = A.map (\v -> let (a, b) = unlift v in a + dt * b) $ A.zip u0 (c' u0)
-    u2 =
-      A.map
-        ( \v ->
-            let (a, b, c) = unlift v
-             in n1 * a + (1 - n1) * (b + dt * c)
-        )
-        $ A.zip3 u0 u1 (c' u1)
+    un = GPU.run1 u1 u
+    c' = c conf
+    u1 = A.map (\v -> let (a, b) = unlift v in a + dt * b) . (\u -> A.zip u (c' u))
+    -- n1 = 0.5
+    -- u2 =
+      -- A.map
+        -- ( \v ->
+            -- let (a, b, c) = unlift v
+             -- in n1 * a + (1 - n1) * (b + dt * c)
+        -- ) $ A.zip3 u0 u1 (c' u1)
 
 
 boundary :: Acc Arr -> Boundary Arr

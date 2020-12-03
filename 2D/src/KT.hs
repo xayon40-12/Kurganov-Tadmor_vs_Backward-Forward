@@ -5,7 +5,7 @@ import Prelude ()
 import Evolve
 
 kt :: Evolve
-kt (Sys f f' g g' dx _ _ _) u = stencil skt (boundary u) u
+kt (Conf f f' g g' dx _ _) u = stencil skt (boundary u) u
      where skt :: Stencil5x5 T -> Exp T
            skt ((_ ,_,t2,_,_ )
                ,(_ ,_,t ,_,_ )
