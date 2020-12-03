@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: b2e6b483786c435cc7b867521b3b67f71a6fdcfea9628f7f15fc2365aaf27786
+-- hash: 23ae35f6d225f34251cdab58576ed33a2f8b7766d87c5a15034b8696ed5d8cd3
 
 name:           KTscheme2D
 version:        0.1.0.0
@@ -29,6 +29,7 @@ library
   exposed-modules:
       BF
       Evolve
+      KT
   other-modules:
       Paths_KTscheme2D
   hs-source-dirs:

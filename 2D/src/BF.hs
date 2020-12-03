@@ -15,5 +15,3 @@ bf (Sys f f' g g' dx _ _ _) u = stencil sbf (boundary u) u
                     ca = g a-g c
                     ec = g c-g e
 
-boundary :: Acc Arr -> Boundary Arr
-boundary _ = function $ const 0
