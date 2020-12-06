@@ -69,7 +69,7 @@ packages:
     hackage: nvvm-0.10.0.0
 snapshots:
 - completed:
-    size: 532835
-    url: https://raw.githubusercontent.com/commercialhaskell/stackage-snapshots/master/lts/16/24.yaml
-    sha256: cf2b52420b2262fe9cf0f6744929120131abd6675b1c3fb2d8b155a47f80d103
-  original: lts-16.24
+    size: 555280
+    url: https://raw.githubusercontent.com/commercialhaskell/stackage-snapshots/master/nightly/2020/12/4.yaml
+    sha256: 3c2d0d136b9b027091f50c28b0e6fa4e0ce780ac7b3a5982c3661f77eff5dd8e
+  original: nightly-2020-12-04

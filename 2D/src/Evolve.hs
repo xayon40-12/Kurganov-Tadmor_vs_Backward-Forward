@@ -79,7 +79,7 @@ toWord32 f = rgba v v 1 1
 rgba :: Exp T -> Exp T -> Exp T -> Exp T -> Exp Word32
 rgba i j k l = r + 256 * (g + 256 * (b + 256 * a))
   where
-    [r, g, b, a] = [max 0 $ min 255 $ A.floor (c * 255) | c <- [i, j, k, l]]
+    [r, g, b, a] = [{-max 0 $ min 255 $ -}A.floor (c * 255) | c <- [i, j, k, l]]
 
 handleEvent :: Event -> State -> State
 handleEvent _ = id
@@ -90,16 +90,16 @@ stepWorld _ _ s = next <$> s
 next :: System -> System
 next (conf@(Conf _ _ _ _ _ dt c),u) = (conf,un)
   where
-    un = GPU.run1 u1 u
+    un = GPU.run1 (\u -> u2 u $ u1 u) u
     c' = c conf
-    u1 = A.map (\v -> let (a, b) = unlift v in a + dt * b) . (\u -> A.zip u (c' u))
-    -- n1 = 0.5
-    -- u2 =
-      -- A.map
-        -- ( \v ->
-            -- let (a, b, c) = unlift v
-             -- in n1 * a + (1 - n1) * (b + dt * c)
-        -- ) $ A.zip3 u0 u1 (c' u1)
+    u1 u = A.map (\v -> let (a, b) = unlift v in a + dt * b) $ A.zip u (c' u)
+    n1 = 0.5
+    u2 u u1 =
+      A.map
+        ( \v ->
+            let (a, b, c) = unlift v
+             in n1 * a + (1 - n1) * (b + dt * c)
+        ) $ A.zip3 u u1 (c' u1)
 
 
 boundary :: Acc Arr -> Boundary Arr

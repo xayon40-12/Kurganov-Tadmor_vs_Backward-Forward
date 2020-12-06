@@ -20,7 +20,7 @@ extra-source-files:
 description:         Please see the README on GitHub at <https://github.com/xayon40-12/2D#readme>
 
 dependencies:
-- base >= 4.7 && < 5
+- base
 - accelerate
 - gloss-accelerate
 - accelerate-llvm-ptx
@@ -40,11 +40,16 @@ executables:
     #- -eventlog
     - -O2
     - -rtsopts
-    #- -with-rtsopts=-N
+    - -with-rtsopts=-N
+    #- -with-rtsopts=-G5
+    - -with-rtsopts=-xn
+    #- -with-rtsopts=-H1024M
     - -with-rtsopts=-n2M
     - -with-rtsopts=-A64M
-    - -with-rtsopts=-qg
+    #- -with-rtsopts=-F4
+    #- -with-rtsopts=-qg
     #- -with-rtsopts=-T
+    - -with-rtsopts=-s
     dependencies:
     - KTscheme2D
 

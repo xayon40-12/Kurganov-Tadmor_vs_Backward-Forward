@@ -19,5 +19,5 @@ main = simulate (InWindow "KT" (2*width+10, 2*hight+10) (0, 0)) white 30 start m
         f' _ = fst v
         g' _ = snd v
         dx = constant 0.1
-        dt = dx / uncurry (+) v / constant 10
+        dt = dx / uncurry (+) v / constant 5
         !start = [(Conf f f' g g' dx dt kt,arr),(Conf f f' g g' dx dt bf, arr)]
