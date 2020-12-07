@@ -49,7 +49,7 @@ executables:
     #- -with-rtsopts=-F4
     #- -with-rtsopts=-qg
     #- -with-rtsopts=-T
-    - -with-rtsopts=-s
+    #- -with-rtsopts=-s
     dependencies:
     - KTscheme2D
 
