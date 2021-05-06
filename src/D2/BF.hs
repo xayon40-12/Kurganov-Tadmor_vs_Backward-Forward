@@ -1,9 +1,9 @@
-module BF where
+module D2.BF where
 
 import Data.Array.Accelerate
 import Prelude ()
 
-import Evolve
+import D2.Evolve
 
 bf :: Evolve
 bf (Conf f f' g g' dx _ _) u = stencil sbf (boundary u) u

@@ -5,9 +5,9 @@ module Main where
 import Graphics.Gloss
 import Data.Array.Accelerate (constant)
 
-import Evolve
-import BF
-import KT
+import D2.Evolve
+import D2.BF
+import D2.KT
 
 
 main :: IO ()

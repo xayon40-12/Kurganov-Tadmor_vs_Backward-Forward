@@ -1,8 +1,8 @@
 {-# LANGUAGE BangPatterns #-}
 
-module Evolve where
+module D2.Evolve where
 
-import Data.Array.Accelerate (Acc, Array, Boundary, DIM2, Exp, Word32, Z (..), constant, function, generate, unlift, use, (:.) (..), (?))
+import Data.Array.Accelerate (Acc, Array, Boundary, DIM2, Exp, Word32, Z (..), constant, function, generate, unlift, (:.) (..), (?))
 import qualified Data.Array.Accelerate as A
 import qualified Data.Array.Accelerate.LLVM.Native as CPU
 import qualified Data.Array.Accelerate.LLVM.PTX as GPU
@@ -34,9 +34,11 @@ type Evolve = Conf -> Acc Arr -> Acc Arr
 
 type State = [System]
 
-width = 400 :: Int
+width :: Int
+width = 400
 
-hight = 400 :: Int
+hight :: Int
+hight = 400
 
 arr :: Arr
 arr = res
@@ -90,12 +92,11 @@ stepWorld :: ViewPort -> Float -> State -> State
 stepWorld _ _ s = next <$> s
 
 next :: System -> System
-next (conf@(Conf _ _ _ _ _ dt c), u) = (conf, un)
+next (conf@(Conf _ _ _ _ _ dt e), u') = (conf, un)
   where
-    un = GPU.run1 (\u -> u2 u $ u1 u) u
-    --pos = A.map (\a -> (a A.< 0) ? (0,a))
-    c' = c conf
-    u1 u = A.map (\v -> let (a, b) = unlift v in a + dt * b) $ A.zip u (c' u)
+    un = GPU.run1 (\u -> u2 u $ u1' u) u'
+    e' = e conf
+    u1' u = A.map (\v -> let (a, b) = unlift v in a + dt * b) $ A.zip u (e' u)
     n1 = 0.5
     u2 u u1 =
       A.map
@@ -103,7 +104,7 @@ next (conf@(Conf _ _ _ _ _ dt c), u) = (conf, un)
             let (a, b, c) = unlift v
              in n1 * a + (1 - n1) * (b + dt * c)
         )
-        $ A.zip3 u u1 (c' u1)
+        $ A.zip3 u u1 (e' u1)
 
 boundary :: Acc Arr -> Boundary Arr
 boundary _ = function $ const 0

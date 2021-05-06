@@ -1,7 +1,7 @@
-module KT where
+module D2.KT where
 
+import D2.Evolve
 import Data.Array.Accelerate
-import Evolve
 import Prelude ()
 
 kt :: Evolve
@@ -38,5 +38,7 @@ ux_ (um, uc, up) = minmod [theta * (uc - um), (up - um) / 2, theta * (up - uc)]
     theta = 1.1
 
 minmod :: [Exp T] -> Exp T
+minmod [] = error "minmod takes at least one value"
+minmod [a] = a
 minmod [a, b] = (signum a + signum b) / 2 * min (abs a) (abs b)
 minmod (a : b : xs) = minmod $ minmod [a, b] : xs

@@ -1,9 +1,9 @@
-module BF where
+module D1.BF where
 
-import Evolve
-    
+import D1.Evolve
+
 bf :: Evolve
-bf dx s@(Sys f f' _ u) i = - ux / dx
+bf dx s@(Sys f f' _ _) i = - ux / dx
   where
     um = f $ u__ s (i -1)
     uc = f $ u__ s i

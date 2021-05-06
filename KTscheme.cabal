@@ -4,13 +4,13 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: bb11086e6a87b74765bac07ad829424d695e9833a3d432522ed923f1ab36199f
+-- hash: 346c9902ac49139f772202e9cdb4c26b207bad949003199da22990c12bcd6945
 
-name:           KTscheme2D
+name:           KTscheme
 version:        0.1.0.0
-description:    Please see the README on GitHub at <https://github.com/xayon40-12/2D#readme>
-homepage:       https://github.com/xayon40-12/2D#readme
-bug-reports:    https://github.com/xayon40-12/2D/issues
+description:    Please see the README on GitHub at <https://github.com/xayon40-12/Kurganov-Tadmor_vs_Backward-Forward#readme>
+homepage:       https://github.com/xayon40-12/Kurganov-Tadmor_vs_Backward-Forward#readme
+bug-reports:    https://github.com/xayon40-12/Kurganov-Tadmor_vs_Backward-Forward/issues
 author:         Nathan Touroux
 maintainer:     touroux.nathan@gmail.com
 copyright:      2020 Nathan Touroux
@@ -19,60 +19,65 @@ license-file:   LICENSE
 build-type:     Simple
 extra-source-files:
     README.md
-    ChangeLog.md
 
 source-repository head
   type: git
-  location: https://github.com/xayon40-12/2D
+  location: https://github.com/xayon40-12/Kurganov-Tadmor_vs_Backward-Forward
 
 library
   exposed-modules:
-      BF
-      Evolve
-      KT
+      D1.BF
+      D1.Evolve
+      D1.KT
+      D2.BF
+      D2.Evolve
+      D2.KT
   other-modules:
-      Paths_KTscheme2D
+      Paths_KTscheme
   hs-source-dirs:
       src
+  ghc-options: -Wall
   build-depends:
       accelerate
     , accelerate-llvm-native
     , accelerate-llvm-ptx
+    , array
     , base
     , gloss
     , gloss-accelerate
   default-language: Haskell2010
 
-executable 2D-exe
+executable KT1D
   main-is: Main.hs
   other-modules:
-      Paths_KTscheme2D
+      Paths_KTscheme
   hs-source-dirs:
-      app
-  ghc-options: -Wall -threaded -O2 -rtsopts -with-rtsopts=-N -with-rtsopts=-xn -with-rtsopts=-n2M -with-rtsopts=-A64M
+      app/KT1D
+  ghc-options: -Wall -threaded -O2 -rtsopts -with-rtsopts=-N
   build-depends:
-      KTscheme2D
+      KTscheme
     , accelerate
     , accelerate-llvm-native
     , accelerate-llvm-ptx
+    , array
     , base
     , gloss
     , gloss-accelerate
   default-language: Haskell2010
 
-test-suite 2D-test
-  type: exitcode-stdio-1.0
-  main-is: Spec.hs
+executable KT2D
+  main-is: Main.hs
   other-modules:
-      Paths_KTscheme2D
+      Paths_KTscheme
   hs-source-dirs:
-      test
-  ghc-options: -threaded -rtsopts -with-rtsopts=-N
+      app/KT2D
+  ghc-options: -Wall -threaded -O2 -rtsopts -with-rtsopts=-N -with-rtsopts=--nonmoving-gc -with-rtsopts=-n2M -with-rtsopts=-A64M
   build-depends:
-      KTscheme2D
+      KTscheme
     , accelerate
     , accelerate-llvm-native
     , accelerate-llvm-ptx
+    , array
     , base
     , gloss
     , gloss-accelerate

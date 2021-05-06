@@ -1,6 +1,6 @@
-name:                KTscheme2D
+name:                KTscheme
 version:             0.1.0.0
-github:              "xayon40-12/2D"
+github:              "xayon40-12/Kurganov-Tadmor_vs_Backward-Forward"
 license:             BSD3
 author:              "Nathan Touroux"
 maintainer:          "touroux.nathan@gmail.com"
@@ -8,7 +8,6 @@ copyright:           "2020 Nathan Touroux"
 
 extra-source-files:
 - README.md
-- ChangeLog.md
 
 # Metadata used when publishing your package
 # synopsis:            Short description of your package
@@ -17,49 +16,46 @@ extra-source-files:
 # To avoid duplicated efforts in documentation and dealing with the
 # complications of embedding Haddock markup inside cabal files, it is
 # common to point users to the README.md file.
-description:         Please see the README on GitHub at <https://github.com/xayon40-12/2D#readme>
+description:         Please see the README on GitHub at <https://github.com/xayon40-12/Kurganov-Tadmor_vs_Backward-Forward#readme>
 
 dependencies:
 - base
+- array
 - accelerate
 - gloss-accelerate
 - accelerate-llvm-ptx
 - accelerate-llvm-native
 - gloss
 
+ghc-options:
+  - -Wall
+
 library:
   source-dirs: src
 
 executables:
-  2D-exe:
+  KT1D:
     main:                Main.hs
-    source-dirs:         app
+    source-dirs:         app/KT1D
     ghc-options:
-    - -Wall
     - -threaded
-    #- -eventlog
     - -O2
     - -rtsopts
     - -with-rtsopts=-N
-    #- -with-rtsopts=-G5
-    - -with-rtsopts=-xn
-    #- -with-rtsopts=-H1024M
-    - -with-rtsopts=-n2M
-    - -with-rtsopts=-A64M
-    #- -with-rtsopts=-F4
-    #- -with-rtsopts=-qg
-    #- -with-rtsopts=-T
-    #- -with-rtsopts=-s
     dependencies:
-    - KTscheme2D
+    - KTscheme
 
-tests:
-  2D-test:
-    main:                Spec.hs
-    source-dirs:         test
+  KT2D:
+    main:                Main.hs
+    source-dirs:         app/KT2D
     ghc-options:
     - -threaded
+    - -O2
     - -rtsopts
     - -with-rtsopts=-N
+    - -with-rtsopts=--nonmoving-gc
+    - -with-rtsopts=-n2M
+    - -with-rtsopts=-A64M
     dependencies:
-    - KTscheme2D
+    - KTscheme
+
