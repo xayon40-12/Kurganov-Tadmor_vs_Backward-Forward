@@ -15,7 +15,8 @@ infix 9 .+
 (.+) Im M = -1
 (.+) _ _ = 0
 
-theta = 2
+theta :: T
+theta = 1.9
 
 minmod :: [T] -> T
 minmod [] = error "minmod takes at least one value"
@@ -27,29 +28,32 @@ minmodt :: (T, T, T) -> T
 minmodt (um, uc, up) = minmod [theta * (uc - um), (up - um) / 2, theta * (up - uc)]
 
 minmodtf :: Func -> (T, T, T) -> T
-minmodtf f (um, uc, up) = minmod [theta * d uc um, d up um / 2, theta * d up uc]
+minmodtf f (um, uc, up) = minmod [theta * d uc um, d up um, theta * d up uc]
   where
     d a b = if a == b then 0 else (f a - f b) / (a - b)
 
-kt :: Evolve
-kt dx s i = - (h dx s i Ip - h dx s i Im) / dx
+kt :: Bool -> Evolve
+kt mano dx s i = - (h mano s i Ip - h mano s i Im) / dx
 
-h :: Float -> System -> Id -> IDir -> T
-h dx s@(Sys f f' _ _) i id = (fup + fum - a * (up - um)) / 2
+h :: Bool -> System -> Id -> IDir -> T
+h mano s@(Sys f f' _ _) i id = (f up + f um - a * (up - um)) / 2
   where
-    fup = f up
-    fum = f um
-    upm = u_ s (i -1) P id
     up = u_ s i P id
-    upp = u_ s (i + 1) P id
-    umm = u_ s (i -1) M id
     um = u_ s i M id
-    ump = u_ s (i + 1) M id
+    am = am_ s i id
     af = a_ f' up um
-    fup_ = abs $ minmodtf f (upm, up, upp)
-    fum_ = abs $ minmodtf f (umm, um, ump)
-    am = max fup_ fum_
-    a = am -- if am /= 0 && af /= 0 then trace (show am <> "  " <> show af <> "  " <> show ((af - am) / af)) am else am
+    a = if mano then am else af
+
+am_ :: System -> Int -> IDir -> T
+am_ s@(Sys f _ _ _) i id = am
+  where
+    upp = u__ s (i + id .+ P + 1)
+    up = u__ s (i + id .+ P)
+    um = u__ s (i + id .+ M)
+    umm = u__ s (i + id .+ M -1)
+    fup = abs $ minmodtf f (upp, up, um)
+    fum = abs $ minmodtf f (up, um, umm)
+    am = max fup fum
 
 u_ :: System -> Id -> Dir -> IDir -> T
 u_ u i d id = ui + sgn * uxi / 2

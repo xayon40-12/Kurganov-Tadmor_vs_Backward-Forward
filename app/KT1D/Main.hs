@@ -24,9 +24,9 @@ sinus f = [(i, h2 / 2 * (1 + sin (fromIntegral i * 2 * pi * f / fromIntegral n))
 sys f f' init val = Sys f f' n (array (0, n -1) (init val))
 
 a =
-  [ Sym kt (sys cont cont' gate 3),
+  [ Sym (kt True) (sys cont cont' gate 3),
     Sym bf (sys cont cont' gate 3),
-    Sym kt (sys burger burger' gate 2),
+    Sym (kt True) (sys burger burger' sinus 1),
     Sym bf (sys burger burger' sinus 1)
   ]
 
