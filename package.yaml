@@ -20,12 +20,13 @@ description:         Please see the README on GitHub at <https://github.com/xayo
 
 dependencies:
 - base
+- Vec
+- gloss
 - array
 - accelerate
 - gloss-accelerate
 - accelerate-llvm-ptx
 - accelerate-llvm-native
-- gloss
 
 ghc-options:
   - -Wall
@@ -34,6 +35,17 @@ library:
   source-dirs: src
 
 executables:
+  KT1D2V:
+    main:                Main.hs
+    source-dirs:         app/KT1D2V
+    ghc-options:
+    - -threaded
+    - -O2
+    - -rtsopts
+    - -with-rtsopts=-N
+    dependencies:
+    - KTscheme
+
   KT1D:
     main:                Main.hs
     source-dirs:         app/KT1D

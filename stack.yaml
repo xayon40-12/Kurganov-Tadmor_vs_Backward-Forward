@@ -40,6 +40,7 @@ packages:
 #   commit: e7b331f14bcffb8367cd58fbfc8b40ec7642100a
 #
 extra-deps:
+- Vec-1.0.5@sha256:6548eda62d2c7caa45a1cdfffe3ce512a0f223da80ca3a0eb79b8f8bb544026c,1777
 - accelerate-1.3.0.0
 #- accelerate-fft-1.3.0.0
 #- accelerate-io-1.3.0.0

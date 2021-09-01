@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 346c9902ac49139f772202e9cdb4c26b207bad949003199da22990c12bcd6945
+-- hash: c6da7968fbf878dc5be5942509ed2f8862c49ded85eb350ea7202ec7e26829cd
 
 name:           KTscheme
 version:        0.1.0.0
@@ -29,6 +29,8 @@ library
       D1.BF
       D1.Evolve
       D1.KT
+      D1V2.Evolve
+      D1V2.KT
       D2.BF
       D2.Evolve
       D2.KT
@@ -38,7 +40,8 @@ library
       src
   ghc-options: -Wall
   build-depends:
-      accelerate
+      Vec
+    , accelerate
     , accelerate-llvm-native
     , accelerate-llvm-ptx
     , array
@@ -56,6 +59,26 @@ executable KT1D
   ghc-options: -Wall -threaded -O2 -rtsopts -with-rtsopts=-N
   build-depends:
       KTscheme
+    , Vec
+    , accelerate
+    , accelerate-llvm-native
+    , accelerate-llvm-ptx
+    , array
+    , base
+    , gloss
+    , gloss-accelerate
+  default-language: Haskell2010
+
+executable KT1D2V
+  main-is: Main.hs
+  other-modules:
+      Paths_KTscheme
+  hs-source-dirs:
+      app/KT1D2V
+  ghc-options: -Wall -threaded -O2 -rtsopts -with-rtsopts=-N
+  build-depends:
+      KTscheme
+    , Vec
     , accelerate
     , accelerate-llvm-native
     , accelerate-llvm-ptx
@@ -74,6 +97,7 @@ executable KT2D
   ghc-options: -Wall -threaded -O2 -rtsopts -with-rtsopts=-N -with-rtsopts=--nonmoving-gc -with-rtsopts=-n2M -with-rtsopts=-A64M
   build-depends:
       KTscheme
+    , Vec
     , accelerate
     , accelerate-llvm-native
     , accelerate-llvm-ptx
